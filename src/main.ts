@@ -7,6 +7,8 @@ import { DocumentBuilder } from 'node_modules/@nestjs/swagger/dist/document-buil
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  
+  app.enableCors()
 
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
