@@ -1,0 +1,24 @@
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { PassportStrategy } from "@nestjs/passport";
+import { ExtractJwt, Strategy } from "passport-jwt";
+import { UserRole } from "src/user/entities/user.entities";
+
+@Injectable()
+export class JwtStrategy extends 
+PassportStrategy(Strategy){
+    constructor(){
+        super({
+            jwtFromRequest:ExtractJwt.fromAuthHeaderAsBearerToken(),
+            ignoreExpiration: false,
+            secretOrKey: 'my-secret-key',
+        });
+    }
+
+    async validate(payload: {sub: number; email: string; role: UserRole;}) {
+
+        if(!payload){
+            throw new NotFoundException("not found")
+        }
+        return { userId: payload.sub, email: payload.email, role: payload.role };
+    }
+}
